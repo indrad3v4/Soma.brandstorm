@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <h1>Welcome to Soma.ai!</h1>
+    <p>We understand that each individual holds a unique value in this world. Sometimes, recognizing and articulating that value can be challenging. But that’s where Soma comes in! Let's go! </p>
+    <form method="POST">
+        <input type="hidden" name="question_index" value="{{ question_index }}">
+        <label for="user_input">{{ question }}</label><br>
+        <input type="text" id="user_input" name="user_input" value=""><br>
+        <input type="submit" value="Submit">
+    </form> 
+    <p>{{ result }}</p>
+</body>
+</html>
