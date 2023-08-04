@@ -6,23 +6,24 @@ app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY')
 
 questions = [
-    "Enter your name:",
-    "Describe your journey from:",
-    "Describe your journey to:",
-    "Enter your brand name:",
-    "Enter your brand's core values:",
-    "Enter your brand vision:",
-    "Enter your brand mission:",
-    "Describe your brand personality:",
-    "Enter your unique value:",
-    "Describe your audience:",
-    "Enter your audience insight:",
-    "What's your brand's role?",
-    "What's your big idea?",
-    "Which media platforms will you use?",
-    "Enter your budget:",
-    "Enter your timeframe:",
+    "What's your name?",
+    "Describe your journey so far (e.g., 'I started as a designer and evolved into a creative strategist.'):",
+    "Where do you see your journey taking you (e.g., 'I aim to become a leading figure in AI-powered creative strategy.'):",
+    "What is the name of your brand?",
+    "What are the core values that guide your brand (e.g., 'Innovation, Authenticity, Impact')?",
+    "How do you envision the future with your brand (e.g., 'Creating a world where AI and creativity merge to bring unprecedented value.')?",
+    "What is the mission your brand is on (e.g., 'To redefine creative strategy with the power of AI.')?",
+    "Can you describe your brand's personality (e.g., 'Innovative, Bold, Empathetic')?",
+    "What is the unique value that you bring to your audience (e.g., 'I combine my skills in design, strategy, and AI to deliver unique solutions.')?",
+    "Can you describe your target audience (e.g., 'Tech startups looking for a unique, impactful brand strategy.')?",
+    "What key insight do you have about your audience (e.g., 'They struggle with standing out in the crowded tech startup space.')?",
+    "What role does your brand play for your audience (e.g., 'We act as their creative ally, helping them carve out a unique brand identity.')?",
+    "What is the big idea that your brand stands for (e.g., 'Merging creativity and technology for breakthrough brand strategies.')?",
+    "Which media platforms will you use to reach your audience (e.g., 'LinkedIn, Medium, YouTube')?",
+    "What is your budget for achieving your brand goals?",
+    "What is your timeframe for achieving your brand goals?",
 ]
+
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
