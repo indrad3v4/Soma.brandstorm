@@ -29,6 +29,10 @@ question_temperatures = [
     0.3, 0.5, 0.6, 0.5, 0.4, 0.3, 0.5, 0.4, 0.3, 0.5, 0.6, 0.4, 0.3, 0.5, 0.4, 0.3
 ]
 
+# Initialize an empty list to store the questions and answers
+conversation_history = []
+
+
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -39,18 +43,21 @@ def index():
     user_input = request.form.get('user_input', "")
 
     if request.method == 'POST':
-        if user_input == "":
-            # The user wants an AI-generated answer
-            api_key = os.getenv('API_KEY')
-            openai.api_key = api_key
-            prompt = session['result'] + questions[question_index]  # Add the conversation history to the prompt
-            response = openai.Completion.create(
-                engine="davinci", 
-                prompt=prompt, 
-                max_tokens=60,
-                temperature=question_temperatures[question_index]
-            )
-            user_input = response.choices[0].text.strip()
+        # The user wants an AI-generated answer
+        api_key = os.getenv('API_KEY')
+        openai.api_key = api_key
+
+        # Add the current question and user input to the conversation history
+        conversation_history.append(questions[question_index])
+        conversation_history.append(user_input)
+
+        # Generate the AI's response using the entire conversation history
+        response = openai.Completion.create(
+            engine="davinci", 
+            prompt="\n".join(conversation_history), 
+            max_tokens=60
+        )
+        user_input = response.choices[0].text.strip()
 
         session['result'] += f"{questions[question_index]} {user_input}\n"  # Store the result in the session
         question_index += 1
