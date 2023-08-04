@@ -1,14 +1,42 @@
 <!DOCTYPE html>
 <html>
+<head>
+    <title>Soma.ai</title>
+    <style>
+        .loader {
+            border: 16px solid #f3f3f3; /* Light grey */
+            border-top: 16px solid #3498db; /* Blue */
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-000000-2', 'auto');  // Replace with your Tracking ID
+        ga('send', 'pageview');
+    </script>
+</head>
 <body>
     <h1>Welcome to Soma.ai!</h1>
-    <p>We understand that each individual holds a unique value in this world. Sometimes, recognizing and articulating that value can be challenging. But that’s where Soma comes in! Let's go! </p>
-    <form method="POST">
+    <p>We understand that each individual holds a unique value in this world. Sometimes, recognizing and articulating that value can be challenging. But that’s where Soma comes in! Let's go!</p>
+    <form method="POST" onsubmit="document.getElementById('loader').style.display='block'">
         <input type="hidden" name="question_index" value="{{ question_index }}">
         <label for="user_input">{{ question }}</label><br>
         <input type="text" id="user_input" name="user_input" value=""><br>
         <input type="submit" value="Submit">
-    </form> 
+    </form>
+    <div id="loader" class="loader" style="display: none;"></div>
     <p>{{ result }}</p>
 </body>
 </html>

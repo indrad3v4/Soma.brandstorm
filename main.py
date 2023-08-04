@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, session
 import os
 import openai
 
@@ -23,9 +23,17 @@ questions = [
     "Enter your timeframe:",
 ]
 
+question_temperatures = [
+    # Define a custom temperature for each question, for example:
+    0.3, 0.5, 0.6, 0.5, 0.4, 0.3, 0.5, 0.4, 0.3, 0.5, 0.6, 0.4, 0.3, 0.5, 0.4, 0.3
+]
+
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    result = ""
+    if 'result' not in session:
+        session['result'] = ""  # Initialize the result in the session
+
     question_index = int(request.form.get('question_index', 0))
     user_input = request.form.get('user_input', "")
 
@@ -34,11 +42,17 @@ def index():
             # The user wants an AI-generated answer
             api_key = os.getenv('API_KEY')
             openai.api_key = api_key
-            response = openai.Completion.create(engine="davinci", prompt=questions[question_index], max_tokens=60)
+            prompt = session['result'] + questions[question_index]  # Add the conversation history to the prompt
+            response = openai.Completion.create(
+                engine="davinci", 
+                prompt=prompt, 
+                max_tokens=60,
+                temperature=question_temperatures[question_index]
+            )
             user_input = response.choices[0].text.strip()
-        
-        result += f"{questions[question_index]} {user_input}\n"
-        question_index += 1  # Move to the next question
+
+        session['result'] += f"{questions[question_index]} {user_input}\n"  # Store the result in the session
+        question_index += 1
 
     if question_index >= len(questions):
         # Construct the final prompt
@@ -61,7 +75,7 @@ def index():
         result = response.choices[0].text.strip()
         return render_template('result.html', result=result)  # Render a different template to show the final result
 
-    return render_template('index.html', result=result, question=questions[question_index], question_index=question_index)
+    return render_template('index.html', result=session['result'], question=questions[question_index], question_index=question_index)
 
 if __name__ == "__main__":
     app.run(debug=True)
