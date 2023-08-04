@@ -26,8 +26,8 @@ questions = [
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    if 'conversation_history' not in session:
-        session['conversation_history'] = []
+    if 'process' not in session:
+        session['process'] = []
 
     question_index = int(request.form.get('question_index', 0))
     user_input = request.form.get('user_input', "")
@@ -36,16 +36,16 @@ def index():
         if user_input == "":
             api_key = os.getenv('API_KEY')
             openai.api_key = api_key
-            prompt = '\n'.join(session['conversation_history'] + [questions[question_index]])
+            prompt = '\n'.join(session['process'] + [questions[question_index]])
             response = openai.Completion.create(engine="davinci", prompt=prompt, max_tokens=60)
             user_input = response.choices[0].text.strip()
-        
-        session['conversation_history'] += [questions[question_index], user_input]
+
+        session['process'] += [questions[question_index], user_input]
         question_index += 1
 
     if question_index >= len(questions):
         session.clear()
-        answers = session['conversation_history'][1::2]
+        answers = session['process'][1::2]
         final_prompt = f"""
         I, {answers[0]}, am on a journey from {answers[1]} to {answers[2]}. 
         My brand, {answers[3]}, is guided by our core values of {answers[4]}, and we envision a future where {answers[5]}.
@@ -62,7 +62,9 @@ def index():
         result = response.choices[0].text.strip()
         return render_template('result.html', result=result)
 
-    return render_template('index.html', question=questions[question_index], question_index=question_index)
+    process = '\n'.join(session['process'])
+    return render_template('index.html', process=process, question=questions[question_index], question_index=question_index)
+
 
 if __name__ == "__main__":
     app.run(debug=True)
