@@ -3,6 +3,7 @@ import os
 import openai
 
 app = Flask(__name__)
+app.secret_key = os.getenv('SECRET_KEY')
 
 questions = [
     "Enter your name:",
