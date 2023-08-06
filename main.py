@@ -45,8 +45,8 @@ def index():
         question_index += 1
 
     if question_index >= len(questions):
-        session.clear()
         answers = session['process'][1::2]
+        session.clear()
         final_prompt = f"""
         I, {answers[0]}, am on a journey from {answers[1]} to {answers[2]}. 
         My brand, {answers[3]}, is guided by our core values of {answers[4]}, and we envision a future where {answers[5]}.
